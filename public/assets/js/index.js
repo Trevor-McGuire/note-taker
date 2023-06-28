@@ -4,7 +4,7 @@ let saveNoteBtn;
 let newNoteBtn;
 let noteList;
 
-if (window.location.pathname === '/notes') {
+if (window.location.pathname === '/notes.html') {
   noteTitle = document.querySelector('.note-title');
   noteText = document.querySelector('.note-textarea');
   saveNoteBtn = document.querySelector('.save-note');
@@ -31,7 +31,7 @@ const getNotes = () =>
     headers: {
       'Content-Type': 'application/json',
     },
-  });
+  })
 
 const saveNote = (note) =>
   fetch('/api/notes', {
@@ -119,7 +119,10 @@ const handleRenderSaveBtn = () => {
 // Render the list of note titles
 const renderNoteList = async (notes) => {
   let jsonNotes = await notes.json();
-  if (window.location.pathname === '/notes') {
+  console.log(jsonNotes)
+  console.log(window.location.pathname)
+  if (window.location.pathname === '/notes.html') {
+    console.log(noteList)
     noteList.forEach((el) => (el.innerHTML = ''));
   }
 
@@ -150,22 +153,26 @@ const renderNoteList = async (notes) => {
 
       liEl.append(delBtnEl);
     }
-
+    console.log(liEl)
     return liEl;
   };
-
+  console.log(jsonNotes.length)
   if (jsonNotes.length === 0) {
     noteListItems.push(createLi('No saved Notes', false));
   }
+  console.log(noteListItems)
 
   jsonNotes.forEach((note) => {
+    console.log(note.title)
     const li = createLi(note.title);
-    li.dataset.note = JSON.stringify(note);
+    // li.dataset.note = JSON.stringify(note);
 
     noteListItems.push(li);
   });
 
-  if (window.location.pathname === '/notes') {
+  console.log(noteListItems)
+
+  if (window.location.pathname === '/notes.html') {
     noteListItems.forEach((note) => noteList[0].append(note));
   }
 };

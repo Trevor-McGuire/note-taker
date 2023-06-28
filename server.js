@@ -1,16 +1,19 @@
+// basic requirements
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const router = require('express').Router()
+const PORT = 3001;
+const app = express();
+
+// require the db JSON file that holds all the notes
+const dbFileName = path.join(__dirname,'/db/db.json')
+const dbFile = require(dbFileName)
+
 // Helper method for generating unique ids
 const uuid = require('uuid');
 // const { v1: uuidv1 } = require('uuid');
 
-const router = require('express').Router()
-
-
-const PORT = 3001;
-
-const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -27,11 +30,8 @@ router.get('/notes', (req, res) => {
 
 
 // GET request for reviews
-app.get('/api/reviews', (req, res) => {
-  // Send a message to the client
-  res.json(`${req.method} request received to get reviews`);
-
-  // Log our request to the terminal
+app.get('/api/notes', (req, res) => {
+  res.json(dbFile);
   console.info(`${req.method} request received to get reviews`);
 });
 
