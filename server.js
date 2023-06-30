@@ -12,6 +12,7 @@ const dbFile = require(dbFileName)
 
 // Helper method for generating unique ids
 const uuid = require('uuid');
+const {v4 : uuidv4} = require('uuid')
 // const { v1: uuidv1 } = require('uuid');
 
 
@@ -28,6 +29,12 @@ router.get('/notes', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/notes.html'));
 });
 
+app.get('/api/notes/:id', (req, res) => {
+  const note = dbFile.find(o => o.id === req.params.id);
+  res.json(note);
+  console.info(`${req.method} request received to get review ${req.params.id}`);
+});
+
 
 // GET request for reviews
 app.get('/api/notes', (req, res) => {
@@ -36,43 +43,36 @@ app.get('/api/notes', (req, res) => {
 });
 
 // POST request to add a review
-app.post('/api/reviews', (req, res) => {
+app.post('/api/notes', (req, res) => {
   // Log that a POST request was received
   console.info(`${req.method} request received to add a review`);
 
   // Destructuring assignment for the items in req.body
-  const { product, review, username } = req.body;
+  const { id, title, text } = req.body;
 
   // If all the required properties are present
-  if (product && review && username) {
+  if (title && text) {
     // Variable for the object we will save
-    const newReview = {
-      product,
-      review,
-      username,
-      upvotes: Math.floor(Math.random() * 100),
-      review_id: uuid(),
+    const newNote = {
+      id: uuidv4(),
+      title, 
+      text,
     };
 
     // Convert the data to a string so we can save it
-    const reviewString = JSON.stringify(newReview);
+    const noteString = newNote;
+
 
     // Write the string to a file
-    fs.writeFile(`./db/${newReview.product}.json`, reviewString, (err) =>
-      err
-        ? console.error(err)
-        : console.log(
-            `Review for ${newReview.product} has been written to JSON file`
-          )
-    );
-
-    const response = {
-      status: 'success',
-      body: newReview,
-    };
-
-    console.log(response);
-    res.status(201).json(response);
+    fs.readFile(dbFileName, function (err, data) {
+      var allNotes = dbFile
+      allNotes.push(noteString)
+      
+      fs.writeFile(dbFileName, JSON.stringify(allNotes), function (err) {
+        if (err) throw err;
+        console.log('Saved!');
+      });
+    })
   } else {
     res.status(500).json('Error in posting review');
   }
