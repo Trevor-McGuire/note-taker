@@ -40,7 +40,6 @@ const saveNote = (data) => {
     body: JSON.stringify(data),
   });
 }
-  
 
 const deleteNote = (id) =>
   fetch(`/api/notes/${id}`, {
@@ -103,7 +102,7 @@ const handleNoteView = (e) => {
 const handleNewNoteView = (e) => {
   console.log("handleNewNoteView()")
   activeNote = {};
-  renderActiveNote();
+  document.location.reload()
 };
 
 const handleRenderSaveBtn = () => {
