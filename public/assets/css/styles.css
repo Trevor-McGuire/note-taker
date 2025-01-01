@@ -76,3 +76,8 @@ body {
   padding: 20px;
   cursor: pointer;
 }
+
+.float-right
+{
+  float: right;
+}
