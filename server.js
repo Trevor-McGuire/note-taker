@@ -31,7 +31,7 @@ app.use(express.static("public"));
 
 app.get("/notes", (req, res) => {
   if (dbFile.length === 0) {
-    res.json({ message: "No notes found" });
+    return res.json({ message: "No notes found" });
   }
   
   // get the title and id of each note
@@ -39,7 +39,7 @@ app.get("/notes", (req, res) => {
   res.json(noteTitles);
 });
 
-app.get("/note/:id", (req, res) => {
+app.get("/notes/:id", (req, res) => {
   const note = dbFile.find((note) => note.id === req.params.id);
   if (!note) {
     res.json({ message: "Note of id '" + req.params.id + "' not found" });
@@ -48,14 +48,15 @@ app.get("/note/:id", (req, res) => {
   }
 });
 
-app.post("/note/:id", (req, res) => {
+app.post("/notes/:id", (req, res) => {
   // if id exists, update note
   const noteIndex = dbFile.findIndex((note) => note.id === req.params.id);
   if (noteIndex !== -1) {
+    console.log(`Updating note with ID: ${req.params.id}`);
     dbFile[noteIndex] = req.body;
   } else {
-    // if id does not exist, create new note
     req.body.id = uuidv4();
+    console.log(`Creating new note with ID: ${req.body.id}`);
     dbFile.push(req.body);
   }
   fs.writeFile(dbFileName, JSON.stringify(dbFile, null, 2), (err) =>
@@ -64,7 +65,7 @@ app.post("/note/:id", (req, res) => {
   res.json(req.body);
 });
 
-app.delete("/note/:id", (req, res) => {
+app.delete("/notes/:id", (req, res) => {
   const noteIndex = dbFile.findIndex((note) => note.id === req.params.id);
   if (noteIndex === -1) {
     res.status(404).json({ error: `Note with ID '${req.params.id}' not found.` });
