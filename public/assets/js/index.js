@@ -41,14 +41,16 @@ const saveNote = async (note) => {
     body: JSON.stringify(note),
   });
   const data = await res.json();
+  console.log(data);
   return data;
 }
 
-const handleNoteDelete = async (id) => {
+const deleteNote = async (id) => {
   const res = await fetch(`/notes/${id}`, {
     method: "DELETE",
   });
   const data = await res.json();
+  console.log(data);
   await handleNotesListRender();
 };
 
@@ -78,7 +80,7 @@ const handleNotesListRender = async () => {
     deleteBtn.setAttribute("data-id", id);
     deleteBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      handleNoteDelete(id);
+      deleteNote(id);
     });
 
     noteEl.appendChild(span);

@@ -1,26 +1,97 @@
 # Note Taker
 
-Note Taker is an app that allows you to add, save, and review notes
-
 ## Description
 
-- Have the ability to save a note
-- View all of your past notes
+Note Taker is a web application that allows users to create, view, and delete notes. The application uses a JSON file (`db.json`) to store notes and provides a user-friendly interface for managing them.
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Endpoints](#endpoints)
 
 ## Installation
 
-If downloading from GitHub, use the package manager [npm](https://www.npmjs.com/) to install the necessary files to run Note Taker.
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/your-username/note-taker.git
+   ```
+2. Navigate to the project directory:
+   ```sh
+   cd note-taker
+   ```
+3. Install the dependencies:
+   ```sh
+   npm install
+   ```
 
-```bash
-npm install
+4. Start the server:
+   ```sh
+   npm run dev
+   ```
+
+## Usage
+
+1. Open your web browser and navigate to `http://localhost:3001`.
+2. Use the interface to create, view, and delete notes.
+
+## Endpoints
+
+### GET /api/notes
+
+- Description: Retrieves all notes.
+- Response: JSON array of note objects.
+```json
+[
+  {
+    "id": "string",
+    "title": "string"
+  }
+]
+```
+OR
+```json
+[
+  message: "No notes found."
+]
 ```
 
-If interacting through Heroku, no installation is necessary.
+### GET /api/notes/:id
 
-## License
+- Description: Retrieves a specific note by ID.
+- Parameters: `id` (string) - The ID of the note to retrieve.
+- Response: JSON object of the notes.
+```json
+[
+  {
+    "id": "string",
+    "title": "string",
+    "text": "string"
+  }
+]
+```
 
-[MIT](https://choosealicense.com/licenses/mit/)
+### POST /api/notes
 
-## Features
+- Description: Creates a new note.
+- Request Body: JSON object with `title` and `text` properties.
+- Response: JSON object of the created note.
+```json
+{
+  "id": "string",
+  "title": "string",
+  "text": "string"
+}
+```
 
-Save and view your notes.
+### DELETE /api/notes/:id
+
+- Description: Deletes a specific note by ID.
+- Parameters: `id` (string) - The ID of the note to delete.
+- Response: JSON object with a message indicating the result.
+
+```json
+{
+  "message": "Note deleted successfully."
+}
+```
